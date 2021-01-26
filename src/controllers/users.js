@@ -1,0 +1,27 @@
+import createError from 'http-errors';
+
+import User from '../models/user';
+
+export const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+
+    res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      throw createError(404, 'User not found');
+    }
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    return next(error);
+  }
+};
